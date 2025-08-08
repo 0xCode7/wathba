@@ -20,14 +20,16 @@
             align-items: center;
             background: linear-gradient(135deg, #18b0a6, #043534);
             font-family: "Beiruti", sans-serif;
+
+            overflow-y: hidden;
         }
 
         .logo-container {
             position: relative;
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 80px;
+            flex-direction: column; /* عمودي بشكل افتراضي */
+            align-items: center;
+            gap: 40px;
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             padding: 100px 50px 150px;
@@ -36,33 +38,121 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+
         }
 
+        /* ترتيب بلوكات الأولاد والبنات بشكل أفقي جنب بعض */
+        .logo-container > a {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            width: 100%;
+        }
+
+        /* تعديل صورة اللوغو كما قبل */
         .logo {
             position: absolute;
             max-width: 120px;
             height: auto;
             bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
+        .quote-box {
+            max-width: 400px;
+            padding: 20px 30px;
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-left: 6px solid #4caf50;
+            color: #fff;
+            font-style: italic;
+            font-size: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            line-height: 1.5;
+            position: relative;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .quote-box::before {
+            content: "“";
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 3rem;
+            color: #4caf50;
+            opacity: 0.3;
+            font-family: serif;
+            line-height: 1;
+        }
+
+
+        .quote-box {
+            transition: opacity 0.5s ease-in-out;
+            opacity: 1;
+        }
+
+        @keyframes fadeOutIn {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .quote-box.animate-fade {
+            animation: fadeOutIn 1s ease-in-out forwards;
+        }
+
+
+        /* الأيقونات */
         .result-boy i,
         .result-girl i {
             font-size: 60px;
             color: white;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
-        .result-boy i:hover {
+        /* الحاويات الخارجية مع البوردر والتحجيم */
+        .result-boy-container, .result-girl-container {
+            display: inline-block;
+            box-sizing: border-box;
+            border: 3px solid transparent;
+            border-radius: 25px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+
+        .result-boy-container:hover {
+            border-color: #18b0a6;
+            transform: scale(1.05);
+        }
+
+        .result-girl-container:hover {
+            border-color: #f9c5d1;
+            transform: scale(1.05);
+        }
+
+
+        .result-boy-container:hover i {
             transform: scale(1.1);
             color: #18b0a6;
         }
 
-        .result-girl i:hover {
+        .result-girl-container:hover i {
             transform: scale(1.1);
             color: #f9c5d1;
         }
 
+        /* المحتوى الداخلي */
         .result-boy,
         .result-girl {
             flex: 1;
@@ -72,16 +162,12 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
-            transition: transform 0.3s ease;
+            /* أزلت transform هنا لمنع تعارض مع الحاوية */
         }
 
-        .result-boy:hover,
-        .result-girl:hover {
-            transform: scale(1.05);
-        }
-
-        .result-boy a,
-        .result-girl a {
+        /* ضبط الروابط داخل الحاويات */
+        .result-boy-container a,
+        .result-girl-container a {
             background: none;
             border: none;
             padding: 0;
@@ -90,6 +176,7 @@
             outline: none;
         }
 
+        /* النص */
         .label {
             margin-top: 10px;
             font-size: 18px;
@@ -104,17 +191,30 @@
             color: #f9c5d1;
         }
 
+
         @media (max-width: 768px) {
             .logo-container {
-
+                flex-direction: column;
                 gap: 30px;
                 padding: 80px 30px 140px;
+                position: relative;
             }
 
             .logo {
+                position: absolute;
                 max-width: 90px;
                 bottom: -45px;
+                left: 50%;
+                transform: translateX(-50%);
+                margin: 0;
+                width: 200px;
+                height: 200px;
+            }
 
+            .logo-container > a {
+                justify-content: center;
+                gap: 40px;
+                width: 100%;
             }
 
             .result-boy i,
@@ -128,6 +228,9 @@
         }
 
         @media (max-width: 480px) {
+            body{
+                {#overflow-y: visible;#}
+            }
             .logo-container {
                 width: 95%;
                 padding: 60px 20px 120px;
@@ -151,23 +254,76 @@
 </head>
 <body>
 
+
 <div class="logo-container">
-    <a style="text-decoration: none" href="{% url 'get_students' %}?gender=male">
+
+
+    <div class="quote-box">
+        <p>“النجاح هو القدرة على الانتقال من فشل إلى فشل دون فقدان الحماس.”</p>
+    </div>
+
+    <a class="result-boy-container" style="text-decoration: none" href="{% url 'get_students' %}?gender=male">
         <div class="result-boy">
             <i class="fas fa-child"></i>
             <p class="label">نتائج الأولاد</p>
         </div>
     </a>
 
-    <a style="text-decoration: none" href="{% url 'get_students' %}?gender=female">
+    <a class="result-girl-container" style="text-decoration: none" href="{% url 'get_students' %}?gender=female">
         <div class="result-girl">
             <i class="fas fa-person-dress"></i>
             <p class="label">نتائج البنات</p>
         </div>
     </a>
 
-    <img class="logo" src="{% static 'images/logo.png' %}" alt="wathba_logo">
+
+    <img class="logo" src="{% static 'images/logo.png' %}" alt="wathba_logo" width="150px" height="150px" style="bottom: -25px">
 </div>
+
+
+<script>
+    const quoteBox = document.querySelector('.quote-box');
+    const quotes = [
+        "اليوم خطوة، وغدًا خطوات… المهم أنك بدأت الطريق.",
+        "قد تكون البداية صغيرة، لكن العبرة بالنهاية المشرقة.",
+        "كل مجتهد يتعلم، وكل متعلم ينجح بإذن الله.",
+        "نجاح اليوم هو جهد الأمس، ونجاح الغد هو جهد اليوم.",
+        "حتى لو كانت النتيجة قليلة، قيمتك كبيرة عند الله بالنية والعمل.",
+        "الأبطال لا يتوقفون عند أول محطة، بل يواصلون حتى يصلوا.",
+        "اليوم تعلمت، وغدًا ستحصد أكثر بإذن الله.",
+        "الدرجات لا تحدد قيمتك… اجتهادك هو سر نجاحك.",
+        "خطوة صغيرة اليوم، تصنع فرقًا كبيرًا غدًا.",
+        "كل محاولة هي نجاح في عين الله ما دامت خالصة له."
+    ];
+
+    function getRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        return quotes[randomIndex];
+    }
+
+    function changeQuote() {
+        // شغل الأنيميشن
+        quoteBox.classList.add('animate-fade');
+
+        // غير النص عند منتصف الأنيميشن (نسبة 50% من 1 ثانية = 500ms)
+        setTimeout(() => {
+            quoteBox.textContent = getRandomQuote();
+        }, 500);
+
+        // بعد انتهاء الأنيميشن شيل الكلاس عشان يقدر يتكرر المرة الجاية
+        quoteBox.addEventListener('animationend', () => {
+            quoteBox.classList.remove('animate-fade');
+        }, {once: true});
+    }
+
+    // عرض اقتباس أولي
+    quoteBox.textContent = getRandomQuote();
+
+    // تغيير الاقتباس كل 5 ثواني مع أنيميشن
+    setInterval(changeQuote, 5000);
+
+
+</script>
 
 </body>
 </html>

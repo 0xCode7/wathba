@@ -117,6 +117,84 @@
                 color: yellow;
             }
         }
+
+        .feedback-container {
+            display: {% if view %} none {% else %} block {% endif %};
+            max-width: 600px;
+            width: 90%; /* عشان يتناسب مع الشاشات الصغيرة */
+            margin: 40px auto; /* مركز أفقياً ومسافة فوق وتحت */
+            padding: 0 20px;
+            color: #333;
+            box-sizing: border-box; /* مهم عشان padding ما يزيدش العرض */
+        }
+
+
+        .feedback-container .section.feedback-section h2 {
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .feedback-container form {
+            width: 100%; /* عشان الفورم يأخذ عرض الحاوية */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* يخلي العناصر جوه الفورم في النص أفقيًا */
+            gap: 15px; /* مسافة بين العناصر */
+        }
+
+
+        .feedback-container textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1.8px solid #00796b;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .feedback-container textarea:focus {
+            border-color: #004d40;
+            outline: none;
+            box-shadow: 0 0 8px #004d40aa;
+        }
+
+        .feedback-container button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .feedback-container button:hover {
+            background-color: #004d40;
+        }
+
+        .feedback-container .error-message {
+            color: #d32f2f;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feedback-container .success-message {
+            color: #388e3c;
+            font-weight: 700;
+            margin-top: 40px;
+            text-align: center;
+        }
+
     </style>
 </head>
 
@@ -145,6 +223,25 @@
         <button type="submit">ابحث</button>
     </form>
 </div>
+
+<div class="feedback-container" {% if hide_feedback_form %} style="display:none;" {% endif %}>
+    <div class="section feedback-section">
+        <h2>نصيحة لتطوير البرنامج</h2>
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        {% if not success %}
+            <form method="post" action="{% url 'feedback' %}">
+                {% csrf_token %}
+                <textarea name="feedback_text" rows="5" placeholder="اكتب ملاحظتك هنا..." required></textarea>
+                <button type="submit">إرسال</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
 
 <div class="section" id="result-card">
     {% if error %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student
+from .models import Student, Feedback
 
 
 # Register your models here.
@@ -9,3 +9,11 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ['name', 'grade']
     list_filter = ['grade']
     ordering = ['gender', 'grade']
+
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['text', 'created_at']
+    search_fields = ['text']
+    ordering = ['-created_at']
+    list_filter = ['created_at']

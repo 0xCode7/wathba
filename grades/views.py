@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Student
+from django.shortcuts import redirect
+from .models import Student, Feedback
 
 
 def index(request):
@@ -42,6 +43,8 @@ def students_view(request):
                     student.save()
 
                 context['search_result'] = student
+                context['view'] = 'none'
+
 
             elif students.count() > 1:
                 context['error'] = '⚠ الاسم غير فريد، يرجى تحديد اسم أكثر دقة'
@@ -52,4 +55,30 @@ def students_view(request):
                     name__startswith=name[:2]
                 )[:5]
 
+    # اقرأ المتغير من الجلسة وأرسله للسياق ثم احذفه من الجلسة
+    hide_feedback = request.session.pop('hide_feedback_form', False)
+    context['hide_feedback_form'] = hide_feedback
+
     return render(request, 'grade.html', context)
+
+
+
+def feedback_view(request):
+    if request.method == 'POST':
+        feedback_text = request.POST.get('feedback_text', '').strip()
+        if feedback_text:
+            Feedback.objects.create(text=feedback_text)
+            request.session['feedback_success'] = True
+            return redirect('thanks')
+        else:
+            return render(request, 'grade.html', {'error': 'الرجاء كتابة ملاحظتك.'})
+    return redirect('get_students')
+
+
+def thanks_view(request):
+    if request.session.get('feedback_success'):
+        del request.session['feedback_success']
+        request.session['hide_feedback_form'] = True  # إخفاء الفورم عند العودة
+        return render(request, 'thanks.html', {'message': 'شكرًا على ملاحظتك!'})
+    else:
+        return redirect('get_students')
