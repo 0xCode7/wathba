@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج الطلاب</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Beiruti:wght@200..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            color: white;
+            direction: rtl;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #18b0a6, #043534);
+            font-family: sans-serif;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 22px;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        #result-card {
+            margin-top: 20px;
+        }
+
+        .suggestions {
+            color: #f9c5d1;
+            font-weight: bold;
+        }
+
+        .suggestions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestions li {
+            margin: 5px 0;
+        }
+
+        .suggestions a {
+            color: #f9c5d1;
+            text-decoration: none;
+        }
+
+        .suggestions a:hover {
+            text-decoration: underline;
+        }
+
+        form button {
+            background-color: #18b0a6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            padding: 10px 20px;
+
+            &:hover {
+                background-color: #043534;
+                scale: 1.2;
+            }
+        }
+
+        form .suggest-btn {
+            color: white;
+
+            &:hover {
+                text-decoration: underline;
+                transition: 0.3s ease all;
+                scale: 1.3;
+                color: yellow;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="section">
+    {% if top_students %}
+        <h2>الأوائل</h2>
+        <div class="cards-container" id="top-students">
+            {% for student in top_students %}
+                <div class="card">
+                    <h3 style="color: {% if student.gender == 'female' %}#f9c5d1{% else %}#a3e0d9{% endif %};">{{ student.name }}</h3>
+                    <p>الدرجة: {{ student.grade }}</p>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h2>ابحث عن نتيجة طالب</h2>
+    <form method="post" action="{% url 'get_students' %}">
+        {% csrf_token %}
+        <input type="text" id="searchInput" placeholder="ادخل اسم الطالب" name="name" required>
+        <button type="submit">ابحث</button>
+    </form>
+</div>
+
+<div class="section" id="result-card">
+    {% if error %}
+        <p style="color: #ff6b6b; font-weight: bold;">{{ error }}</p>
+    {% endif %}
+
+    {% if search_result %}
+        <div class="cards-container">
+            <div class="card">
+                <h3 style="color: {% if search_result.gender == 'female' %}#f9c5d1{% else %}#a3e0d9{% endif %};">{{ search_result.name }}</h3>
+                <p>الدرجة: {{ search_result.grade }}</p>
+
+            </div>
+        </div>
+    {% endif %}
+
+    {% if suggestions %}
+        <div class="suggestions">
+            <p>💡 هل تقصد:</p>
+            <ul>
+                {% for s in suggestions %}
+                    <li>
+                        <form method="post" action="{% url 'get_students' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="name" value="{{ s.name }}">
+                            <button type="submit" class="suggest-btn"
+                                    style="background:none; border:none; padding:0; cursor:pointer;">
+                                {{ s.name }}
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
