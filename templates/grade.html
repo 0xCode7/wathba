@@ -298,7 +298,18 @@
     {% if search_result %}
         <div class="cards-container">
             <div class="card" style="{% if search_result.is_best %} background-color: gold; color: white; {% endif %}">
-                <h3 style=" {% if search_result.is_best %} color: white; font-weight: bolder;{% elif search_result.is_best == 'female' %}color: #f9c5d1{% else %} color: #a3e0d9{% endif %};">{{ search_result.name }}</h3>
+                <h3 style="
+                        {% if search_result.is_best %}
+                            color: white; font-weight: bolder;
+                        {% elif search_result.gender == 'female' %}
+                            color: #f9c5d1;
+                        {% else %}
+                            color: #a3e0d9;
+                        {% endif %}
+                        ">
+                    {{ search_result.name }}
+                </h3>
+
                 <p style="{% if search_result.is_best %} color: white; font-weight: bolder; {% endif %}">
                     الدرجة: {{ search_result.grade }}</p>
 
