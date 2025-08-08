@@ -79,6 +79,6 @@ def thanks_view(request):
     if request.session.get('feedback_success'):
         del request.session['feedback_success']
         request.session['hide_feedback_form'] = True  # إخفاء الفورم عند العودة
-        return render(request, 'thanks.html', {'message': 'شكرًا على ملاحظتك!'})
+        return render(request, 'thanks.html', {'message': 'شكرًا لانضمامك لرحلة وثبة.. دعمك يلهمنا للاستمرار❤️'})
     else:
         return redirect('get_students')
