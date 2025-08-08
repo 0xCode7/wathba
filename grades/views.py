@@ -13,6 +13,10 @@ def normalize_arabic(text):
         'أ': 'ا',
         'إ': 'ا',
         'آ': 'ا',
+        'ى': 'ي',  # الألف المقصورة تتحول لياء
+        'ئ': 'ي',
+        'ؤ': 'و',
+        'ة': 'ه',  # التاء المربوطة تتحول لهاء (ممكن تختار تبقى 'ة' لو تفضلها)
     }
     for src, target in replacements.items():
         text = text.replace(src, target)

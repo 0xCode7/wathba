@@ -228,10 +228,6 @@
     <div class="section feedback-section">
         <h2>نصيحة لتطوير البرنامج</h2>
 
-        {% if error %}
-            <p class="error-message">{{ error }}</p>
-        {% endif %}
-
         {% if not success %}
             <form method="post" action="{% url 'feedback' %}">
                 {% csrf_token %}
