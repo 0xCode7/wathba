@@ -47,10 +47,10 @@ def students_view(request):
 
 
             elif students.count() > 1:
-                context['error'] = '⚠ الاسم غير فريد، يرجى تحديد اسم أكثر دقة'
+                context['error'] = '⚠ الاسم متكرر، يرجى تحديد اسم أكثر دقة'
 
             else:
-                context['error'] = '❌ الطالب غير مسجل بالبرنامج'
+                context['error'] = '❌ الرجاء التأكد من اسم الطالب في الملف'
                 context['suggestions'] = Student.objects.filter(
                     name__startswith=name[:2]
                 )[:5]
