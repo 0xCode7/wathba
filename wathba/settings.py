@@ -27,10 +27,12 @@ SECRET_KEY = 'django-insecure-et4%^nt=4&1h*v_-&t($ovdd+76nl6wkg6o=s@ph3ys$a*s6gv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['wathba.up.railway.app']
+
 CSRF_TRUSTED_ORIGINS = [
     "https://wathba.up.railway.app"
 ]
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS = True
 
