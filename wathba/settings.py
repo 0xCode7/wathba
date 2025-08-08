@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-et4%^nt=4&1h*v_-&t($ovdd+76nl6wkg6o=s@ph3ys$a*s6gv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['wathba.up.railway.app']
+ALLOWED_HOSTS = ['wathba.up.railway.app', '192.168.1.13', '127.0.0.1', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = [
     "https://wathba.up.railway.app"
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -129,6 +130,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

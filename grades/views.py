@@ -2,9 +2,10 @@ from django.shortcuts import render
 from .models import Student
 
 
-
 def index(request):
     return render(request, 'base.html')
+
+
 def students_view(request):
     context = {}
 
@@ -26,8 +27,21 @@ def students_view(request):
         else:
             students = Student.objects.filter(name__icontains=name)
 
+            # عدل درجات الطلبة الأقل من 10
+            students.filter(grade__lt=10).update(grade=10)
+
             if students.count() == 1:
-                context['search_result'] = students.first()
+                student = students.first()
+                try:
+                    grade_value = float(student.grade)
+                except (ValueError, TypeError):
+                    grade_value = 0.0
+
+                if grade_value < 10:
+                    student.grade = 10
+                    student.save()
+
+                context['search_result'] = student
 
             elif students.count() > 1:
                 context['error'] = '⚠ الاسم غير فريد، يرجى تحديد اسم أكثر دقة'
